@@ -1,17 +1,23 @@
-const phoneLoad = async(inputFluidString) =>{
+const phoneLoad = async(inputFluidString,dataLimited) =>{
     const url = `https://openapi.programming-hero.com/api/phones?search=${inputFluidString}`
     const res = await fetch(url);
     const data = await res.json();
-    displayLoad(data.data)
+    displayLoad(data.data,dataLimited)
 
 }
 
-const displayLoad = phones =>{
+const displayLoad = (phones,dataLimited) =>{
     const phoneContainer = document.getElementById('phone-container');
     phoneContainer.innerText='';
 
     // display show only
-    phones = phones.slice(0,5);
+    const showAll = document.getElementById('show-all')
+   if(dataLimited && phones.length > 10){
+    phones = phones.slice(0,10)
+    showAll.classList.remove('d-none')
+   }else{
+    showAll.classList.add('d-none')
+   }
 
     // display all phone
     const noPhone = document.getElementById('phone-found');
@@ -36,13 +42,16 @@ const displayLoad = phones =>{
     });
     toggleSpiner(false);
 }
-// handle search button 
-document.getElementById('btn-click').addEventListener('click',function(){
-    // start loder
+const processSearch = (dataLimited) =>{
     toggleSpiner(true);
     const inputFluid = document.getElementById('input-fluid');
     const inputFluidString = inputFluid.value;
-    phoneLoad(inputFluidString)
+    phoneLoad(inputFluidString,dataLimited)
+}
+
+// handle search button 
+document.getElementById('btn-click').addEventListener('click',function(){
+    processSearch(10)
 })
 const toggleSpiner = isLoading =>{
     const loderSection = document.getElementById('loder');
@@ -52,4 +61,9 @@ const toggleSpiner = isLoading =>{
         loderSection.classList.add('d-none')
     }
 }
-phoneLoad();
+
+// do not way load show all
+document.getElementById('btn-show-all').addEventListener('click',function(){
+     processSearch();
+})
+// phoneLoad();
