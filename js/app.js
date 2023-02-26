@@ -34,11 +34,22 @@ const displayLoad = phones =>{
         `;
         phoneContainer.appendChild(phoneDiv)
     });
+    toggleSpiner(false);
 }
+// handle search button 
 document.getElementById('btn-click').addEventListener('click',function(){
+    // start loder
+    toggleSpiner(true);
     const inputFluid = document.getElementById('input-fluid');
     const inputFluidString = inputFluid.value;
     phoneLoad(inputFluidString)
 })
-
+const toggleSpiner = isLoading =>{
+    const loderSection = document.getElementById('loder');
+    if(isLoading){
+        loderSection.classList.remove('d-none')
+    }else{
+        loderSection.classList.add('d-none')
+    }
+}
 phoneLoad();
